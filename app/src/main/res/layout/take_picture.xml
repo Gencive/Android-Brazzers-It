@@ -5,7 +5,7 @@
 				tools:context="com.pkesslas.brazzersit.TakePicture"
 				android:background="@color/primary">
 
-	<SurfaceView
+	<FrameLayout
 		android:id="@+id/preview"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
