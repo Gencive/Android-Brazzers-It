@@ -17,8 +17,7 @@ public class BitmapHelper {
 
 		Matrix matrix = new Matrix();
 		matrix.postScale(scaleWidth, scaleHeight);
-		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-		return resizedBitmap;
+		return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
 	}
 
 	public static Bitmap RotateBitmap(Bitmap source, float angle)
