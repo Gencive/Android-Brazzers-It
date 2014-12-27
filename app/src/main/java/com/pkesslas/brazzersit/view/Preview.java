@@ -1,4 +1,4 @@
-package com.pkesslas.brazzersit;
+package com.pkesslas.brazzersit.view;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -7,7 +7,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by sidereo on 26/12/14.
@@ -41,18 +40,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void refreshCamera(Camera camera) {
 		if (mHolder.getSurface() == null) {
-			// preview surface does not exist
 			return;
 		}
-		// stop preview before making changes
+
 		try {
 			mCamera.stopPreview();
 		} catch (Exception e) {
 			// ignore: tried to stop a non-existent preview
 		}
-		// set preview size and make any resize, rotate or
-		// reformatting changes here
-		// start preview with new settings
+
 		setCamera(camera);
 		try {
 			mCamera.setPreviewDisplay(mHolder);
@@ -64,21 +60,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		// If your preview can change or rotate, take care of those events here.
-		// Make sure to stop the preview before resizing or reformatting it.
 		refreshCamera(mCamera);
 	}
 
 	public void setCamera(Camera camera) {
-		//method to set a camera instance
 		mCamera = camera;
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
-		// mCamera.release();
-
+		mCamera.release();
 	}
 }
 

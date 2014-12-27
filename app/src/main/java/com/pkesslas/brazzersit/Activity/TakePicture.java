@@ -1,21 +1,24 @@
-package com.pkesslas.brazzersit;
+package com.pkesslas.brazzersit.Activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.pkesslas.brazzersit.helper.FileHelper;
+import com.pkesslas.brazzersit.view.Preview;
+import com.pkesslas.brazzersit.R;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -27,14 +30,6 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	private Context context;
 	private boolean cameraRelease = false;
 
-	private String getImagePath() {
-		String fileName;
-
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		fileName = "JPEG_" + timeStamp + ".jpg";
-		return fileName;
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,18 +37,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 
 		camera = Camera.open();
 
-		Camera.Parameters parameters = camera.getParameters();
-		Log.e("size", parameters.getPictureSize().height + " " + parameters.getPictureSize().width);
-		List<Camera.Size> list = parameters.getSupportedPictureSizes();
-		for (Camera.Size l : list) {
-			Log.e("elnlsgsgs", l.height + " " + l.width);
-			if (l.height == 720) {
-				parameters.setPictureSize(l.width, l.height);
-			//	break ;
-			}
-		}
-
-		camera.setParameters(parameters);
+		setCameraParameters();
 
 		previewLayout = (FrameLayout) findViewById(R.id.preview);
 		preview = new Preview(this, camera);
@@ -61,6 +45,22 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		takePictureButton = (TextView) findViewById(R.id.btn_take_picture);
 		takePictureButton.setOnClickListener(this);
 		previewLayout.addView(preview);
+	}
+
+	private void setCameraParameters() {
+		Camera.Parameters parameters = camera.getParameters();
+		List<Camera.Size> list = parameters.getSupportedPictureSizes();
+		setPictureSize(parameters, list);
+
+		camera.setParameters(parameters);
+	}
+
+	private void setPictureSize(Camera.Parameters parameters, List<Camera.Size> list) {
+		for (Camera.Size l : list) {
+			if (l.height == 720) {
+				parameters.setPictureSize(l.width, l.height);
+			}
+		}
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	public void onDestroy() {
 		super.onDestroy();
 		camera.release();
-		Log.d("CAMERA","Destroy");
+		Log.d("CAMERA", "Destroy");
 	}
 
 	@Override
@@ -86,7 +86,8 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	}
 
 	private static File getOutputMediaFile() {
-		File mediaStorageDir = new File("/sdcard/", "test/");
+		File mediaFile;
+		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES);
 
 		if (!mediaStorageDir.exists()) {
 			if (!mediaStorageDir.mkdirs()) {
@@ -94,14 +95,12 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 			}
 		}
 
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		File mediaFile;
-		mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + "test.png");
+		mediaFile = new File(mediaStorageDir.getPath() + File.separator + FileHelper.createImageName("IMG"));
 
 		return mediaFile;
 	}
 
-	Camera.PictureCallback photoCallback=new Camera.PictureCallback() {
+	Camera.PictureCallback photoCallback = new Camera.PictureCallback() {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			//make a new picture file
@@ -115,7 +114,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 				fos.write(data);
 				fos.close();
 
-				displayPicture(pictureFile);
+				goToDisplayPicture(pictureFile);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -125,7 +124,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		}
 	};
 
-	protected void displayPicture(File photo) {
+	protected void goToDisplayPicture(File photo) {
 		cameraRelease = true;
 		camera.release();
 		Intent intent = new Intent(context, DisplayTakenPhoto.class);
