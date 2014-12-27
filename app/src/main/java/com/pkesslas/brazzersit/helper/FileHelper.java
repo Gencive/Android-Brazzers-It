@@ -16,6 +16,7 @@ import java.util.Date;
  * Created by Pierre-Elie on 27/12/14.
  */
 public class FileHelper {
+	public static final File STORAGE_DIR = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES);
 
 	public static String createImageName(String anchor) {
 		String fileName;
