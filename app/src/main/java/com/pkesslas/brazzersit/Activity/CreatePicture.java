@@ -18,15 +18,19 @@ import android.widget.Toast;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.helper.BitmapHelper;
 import com.pkesslas.brazzersit.helper.FileHelper;
+import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CreatePicture extends ActionBarActivity implements View.OnClickListener {
 	private static int RESULT_LOAD_IMAGE = 1;
 
 	private TextView browseButton, saveButton, deleteButton;
 
-	Bitmap finalBitmap;
+	private Bitmap finalBitmap;
+	private Uri source, outputUri;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,10 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
+		if (resultCode == RESULT_CANCELED) {
+			finish();
+			startActivity(getIntent());
+		}
 		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
 			Uri selectedImage = data.getData();
 			String[] filePathColumn = {
@@ -80,12 +88,30 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 			String picturePath = cursor.getString(columnIndex);
 			cursor.close();
 
-			ImageView imageView = (ImageView) findViewById(R.id.image);
-			finalBitmap = createFinalBitmap(BitmapFactory.decodeFile(picturePath), 25);
-			imageView.setImageBitmap(finalBitmap);
+			source = Uri.fromFile(new File(picturePath));
+			outputUri = Uri.fromFile(new File(FileHelper.STORAGE_DIR, "tmp_cropped.png"));
 
-			saveButton.setVisibility(View.VISIBLE);
-			deleteButton.setVisibility(View.VISIBLE);
+			new Crop(source).output(outputUri).withMaxSize(1280, 1280).start(this);
+		} else if (requestCode == Crop.REQUEST_CROP) {
+			handleCrop(resultCode, data);
+		}
+	}
+
+	private void handleCrop(int resultCode, Intent result) {
+		if (resultCode == RESULT_OK) {
+			ImageView imageView = (ImageView) findViewById(R.id.image);
+			try {
+				finalBitmap = createFinalBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), Crop.getOutput(result)), 25);
+				imageView.setImageBitmap(finalBitmap);
+
+				saveButton.setVisibility(View.VISIBLE);
+				deleteButton.setVisibility(View.VISIBLE);
+			} catch (IOException e) {
+				finish();
+				startActivity(getIntent());
+			}
+		} else if (resultCode == Crop.RESULT_ERROR) {
+			Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
 

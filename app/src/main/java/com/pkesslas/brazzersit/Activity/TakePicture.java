@@ -56,34 +56,19 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	}
 
 	private void setPictureSize(Camera.Parameters parameters, List<Camera.Size> list) {
-		float bestRatio = 2;
-		int bestRationPos = 0;
-		int i = 0;
-		for (Camera.Size l : list) {
-			float ratio = (float)l.width / (float)l.height;
-			if (list.get(0).height > 640 && list.get(0).width >= 640) {
-				if (getDifference(bestRatio) > getDifference(ratio) && l.height >= 640 && l.width >= 640) {
-					bestRatio = ratio;
-					bestRationPos = i;
-				}
-			} else {
-				if (getDifference(bestRatio) > getDifference(ratio)) {
-					bestRatio = ratio;
-					bestRationPos = i;
-				}
+		int height = 0, width = 0;
+		for (int i = list.size() - 1; i >= 0; i--) {
+			if (list.get(i).height > 640 && list.get(i).width > 640) {
+				height = list.get(i).height;
+				width = list.get(i).width;
+				break;
 			}
-			i++;
 		}
-		Log.e("SIZE", "Selected Size " + list.get(bestRationPos).width + " " + list.get(bestRationPos).height);
-		parameters.setPictureSize(list.get(bestRationPos).width, list.get(bestRationPos).height);
-	}
-
-	private float getDifference(float nbr) {
-		if (nbr > 1) {
-			return nbr - 1;
-		} else {
-			return 1 - nbr;
+		if (height == 0 && width == 0) {
+			height = list.get(list.size() - 1).height;
+			width = list.get(list.size() - 1).width;
 		}
+		parameters.setPictureSize(width, height);
 	}
 
 	@Override
@@ -153,5 +138,6 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		Log.i("Photo path", photo.getAbsolutePath());
 		intent.putExtra("path", photo.getAbsolutePath());
 		startActivity(intent);
+		finish();
 	}
 }
