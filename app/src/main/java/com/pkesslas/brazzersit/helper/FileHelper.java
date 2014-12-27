@@ -56,4 +56,12 @@ public class FileHelper {
 		}
 		return finalPictures;
 	}
+
+	public static void deleteFile(String path) {
+		File fileToDelete = new File(path);
+
+		if (fileToDelete.exists()) {
+			fileToDelete.delete();
+		}
+	}
 }
