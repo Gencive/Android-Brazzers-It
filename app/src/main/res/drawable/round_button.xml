@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="#4D000000" />
+                </shape>
+            </item>
+            <item android:bottom="1dp" android:right="1dp" android:left="1dp" android:top="1dp">
+                <shape android:shape="oval">
+                    <solid android:color="#F44336" />
+                </shape>
+            </item>
+            <item android:bottom="3dp" android:right="3dp" android:left="3dp" android:top="3dp">
+                <bitmap android:src="@drawable/delete" />
+            </item>
+        </layer-list>
+    </item>
+</selector>

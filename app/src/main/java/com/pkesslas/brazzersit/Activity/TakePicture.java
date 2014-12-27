@@ -56,10 +56,33 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	}
 
 	private void setPictureSize(Camera.Parameters parameters, List<Camera.Size> list) {
+		float bestRatio = 2;
+		int bestRationPos = 0;
+		int i = 0;
 		for (Camera.Size l : list) {
-			if (l.height == 720) {
-				parameters.setPictureSize(l.width, l.height);
+			float ratio = (float)l.width / (float)l.height;
+			if (list.get(0).height > 640 && list.get(0).width >= 640) {
+				if (getDifference(bestRatio) > getDifference(ratio) && l.height >= 640 && l.width >= 640) {
+					bestRatio = ratio;
+					bestRationPos = i;
+				}
+			} else {
+				if (getDifference(bestRatio) > getDifference(ratio)) {
+					bestRatio = ratio;
+					bestRationPos = i;
+				}
 			}
+			i++;
+		}
+		Log.e("SIZE", "Selected Size " + list.get(bestRationPos).width + " " + list.get(bestRationPos).height);
+		parameters.setPictureSize(list.get(bestRationPos).width, list.get(bestRationPos).height);
+	}
+
+	private float getDifference(float nbr) {
+		if (nbr > 1) {
+			return nbr - 1;
+		} else {
+			return 1 - nbr;
 		}
 	}
 
@@ -103,7 +126,6 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	Camera.PictureCallback photoCallback = new Camera.PictureCallback() {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			//make a new picture file
 			File pictureFile = getOutputMediaFile();
 
 			if (pictureFile == null) {

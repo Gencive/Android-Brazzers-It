@@ -59,15 +59,12 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 	}
 
 	private void deletePictureWithoutLogo(String path) {
-		File fileToDelete = new File(path);
-
-		if (fileToDelete.exists()) {
-			fileToDelete.delete();
-		}
+		FileHelper.deleteFile(path);
 	}
 
 	private Bitmap createFinalBitmap(Bitmap picture, int margin) {
 		Bitmap logoInBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.brazzers);
+		picture = BitmapHelper.getResizedBitmap(picture, 640, 640);
 		logoInBitmap = BitmapHelper.getResizedBitmap(logoInBitmap, picture.getHeight() * 10 / 100, picture.getWidth() * 50 / 100);
 		int xLogo = (picture.getWidth() - logoInBitmap.getWidth()) - margin;
 		int yLogo = (picture.getHeight() - logoInBitmap.getHeight()) - margin;
@@ -85,10 +82,10 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 			Toast.makeText(this, "Picture has been saved", Toast.LENGTH_LONG).show();
 		}
 		startActivity(new Intent(this, MainActivity.class));
+		finish();
 	}
 
 	private String getFinalPngPath() {
-		return new File(Environment.getExternalStorageDirectory(),
-				Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + FileHelper.createImageName("BRZ");
+		return new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + FileHelper.createImageName("BRZ");
 	}
 }
