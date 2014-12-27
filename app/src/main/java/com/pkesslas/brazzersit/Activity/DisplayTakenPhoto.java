@@ -59,6 +59,7 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 
 	private Bitmap createFinalBitmap(Bitmap picture, int margin) {
 		Bitmap logoInBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.brazzers);
+		logoInBitmap = BitmapHelper.getResizedBitmap(logoInBitmap, picture.getHeight() * 10 / 100, picture.getWidth() * 50 / 100);
 		int xLogo = (picture.getWidth() - logoInBitmap.getWidth()) - margin;
 		int yLogo = (picture.getHeight() - logoInBitmap.getHeight()) - margin;
 

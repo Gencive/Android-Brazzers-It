@@ -31,7 +31,6 @@ public class BitmapHelper {
 	public static Bitmap overlay(Bitmap bmp1, Bitmap bmp2, int x, int y) {
 		Bitmap finalizeBitmap;
 
-		bmp2 = BitmapHelper.getResizedBitmap(bmp2, bmp1.getHeight() * 10 / 100, bmp1.getWidth() * 50 / 100);
 		finalizeBitmap = Bitmap.createBitmap(bmp1.getWidth(), bmp1.getHeight(), bmp1.getConfig());
 		Canvas canvas = new Canvas(finalizeBitmap);
 
