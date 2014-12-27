@@ -81,5 +81,6 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 	private String getFinalPngPath() {
 		return new File(Environment.getExternalStorageDirectory(),
 				Environment.DIRECTORY_PICTURES).getAbsolutePath() + FileHelper.createImageName("BRZ");
+				Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + FileHelper.createImageName("BRZ");
 	}
 }
