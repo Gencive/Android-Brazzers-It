@@ -88,6 +88,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	public void onClick(View v) {
 		if (v.getId() == R.id.btn_camera) {
 			startActivity(new Intent(this, TakePicture.class));
+		} else if (v.getId() == R.id.btn_upload) {
+			startActivity(new Intent(this, CreatePicture.class));
 		}
 	}
 
