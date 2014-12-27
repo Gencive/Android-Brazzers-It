@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -49,11 +50,11 @@ public class FileHelper {
 		File picturesDirectory = new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES);
 
 		for (File picture :  picturesDirectory.listFiles()) {
-			Log.e("Picture Path", picture.getAbsolutePath());
 			if (picture.getName().startsWith("BRZ")) {
 				finalPictures.add(picture.getAbsolutePath());
 			}
 		}
+		Collections.reverse(finalPictures);
 		return finalPictures;
 	}
 
