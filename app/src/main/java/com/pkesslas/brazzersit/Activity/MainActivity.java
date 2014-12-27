@@ -3,12 +3,14 @@ package com.pkesslas.brazzersit.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.pkesslas.brazzersit.R;
+import com.pkesslas.brazzersit.helper.FileHelper;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
@@ -29,6 +31,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		cameraButton.setOnClickListener(this);
 		uploadButton.setOnClickListener(this);
 		galleryButton.setOnClickListener(this);
+
+		for (String path : FileHelper.getAllFinalPicturePath()) {
+			Log.i("Selected path", path);
+		}
 	}
 
 
