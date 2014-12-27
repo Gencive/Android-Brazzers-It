@@ -48,12 +48,21 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 
 	private void displayFinalBitmap() {
 		Bitmap picture = BitmapHelper.RotateBitmap(BitmapFactory.decodeFile(picturePath), 90);
+		deletePictureWithoutLogo(picturePath);
 		try {
 			finalBitmap = createFinalBitmap(picture, 25);
 			pictureView.setImageBitmap(finalBitmap);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			pictureView.setImageBitmap(picture);
+		}
+	}
+
+	private void deletePictureWithoutLogo(String path) {
+		File fileToDelete = new File(path);
+
+		if (fileToDelete.exists()) {
+			fileToDelete.delete();
 		}
 	}
 
@@ -80,7 +89,6 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 
 	private String getFinalPngPath() {
 		return new File(Environment.getExternalStorageDirectory(),
-				Environment.DIRECTORY_PICTURES).getAbsolutePath() + FileHelper.createImageName("BRZ");
 				Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + FileHelper.createImageName("BRZ");
 	}
 }
