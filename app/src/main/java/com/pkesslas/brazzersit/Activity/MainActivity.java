@@ -61,4 +61,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 			startActivity(new Intent(this, TakePicture.class));
 		}
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i("onActivtyResult", "" + requestCode);
+		if (requestCode == RELOAD) {
+			finish();
+			startActivity(getIntent());
+		}
+	}
 }
