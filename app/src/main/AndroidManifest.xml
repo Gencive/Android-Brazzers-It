@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name=".Activity.TakePicture"
-            android:label="@string/title_activity_take_picture"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.DisplayTakenPhoto"
@@ -34,13 +34,13 @@
         </activity>
         <activity
             android:name=".Activity.LocalGallery"
-            android:label="@string/title_activity_gallerie"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Activity.CreatePicture"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_create_picture" >
+            android:label="@string/app_name" >
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity"
                   android:screenOrientation="portrait"

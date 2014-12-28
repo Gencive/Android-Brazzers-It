@@ -66,13 +66,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		});
 	}
 
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -89,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		if (v.getId() == R.id.btn_camera) {
 			startActivity(new Intent(this, TakePicture.class));
 		} else if (v.getId() == R.id.btn_create) {
+			finish();
 			startActivity(new Intent(this, CreatePicture.class));
 		}
 	}

@@ -26,7 +26,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	private Camera camera;
 	private Preview preview;
 	private FrameLayout previewLayout;
-	private TextView takePictureButton, flashButton;
+	private TextView takePictureButton, flashButton, buttonHome, buttonCreate;
 	private Context context;
 	private boolean cameraRelease = false;
 	private boolean flashEnable = false;
@@ -35,6 +35,9 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.take_picture);
+
+		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
 
 		camera = Camera.open();
 
@@ -45,9 +48,13 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		context = this;
 		takePictureButton = (TextView) findViewById(R.id.btn_take_picture);
 		flashButton = (TextView) findViewById(R.id.btn_flash);
+		buttonHome = (TextView) findViewById(R.id.btn_home);
+		buttonCreate = (TextView) findViewById(R.id.btn_create);
 
 		takePictureButton.setOnClickListener(this);
 		flashButton.setOnClickListener(this);
+		buttonHome.setOnClickListener(this);
+		buttonCreate.setOnClickListener(this);
 
 		previewLayout.addView(preview);
 	}
@@ -98,6 +105,12 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 			camera.takePicture(null, null, photoCallback);
 		} else if (v.getId() == R.id.btn_flash) {
 			enableFlash();
+		}  else if (v.getId() == R.id.btn_home) {
+			finish();
+			startActivity(new Intent(this, MainActivity.class));
+		} else if (v.getId() == R.id.btn_create) {
+			finish();
+			startActivity(new Intent(this, CreatePicture.class));
 		}
 	}
 

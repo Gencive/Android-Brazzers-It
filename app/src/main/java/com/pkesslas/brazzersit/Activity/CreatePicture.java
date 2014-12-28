@@ -26,7 +26,7 @@ import java.io.IOException;
 public class CreatePicture extends ActionBarActivity implements View.OnClickListener {
 	private static int RESULT_LOAD_IMAGE = 1;
 
-	private TextView browseButton, saveButton, deleteButton;
+	private TextView browseButton, saveButton, deleteButton, homeButton, cameraButton;
 
 	private Bitmap finalBitmap;
 	private Uri source, outputUri;
@@ -37,13 +37,20 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_picture);
 
+		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
+
 		browseButton = (TextView) findViewById(R.id.btn_browse);
 		saveButton = (TextView) findViewById(R.id.btn_save);
 		deleteButton = (TextView) findViewById(R.id.btn_delete);
+		homeButton = (TextView) findViewById(R.id.btn_home);
+		cameraButton = (TextView) findViewById(R.id.btn_camera);
 
 		browseButton.setOnClickListener(this);
 		saveButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
+		homeButton.setOnClickListener(this);
+		cameraButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -60,6 +67,12 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 			Toast.makeText(this, "Picture has been saved", Toast.LENGTH_LONG).show();
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
+		} else if (v.getId() == R.id.btn_home) {
+			finish();
+			startActivity(new Intent(this, MainActivity.class));
+		} else if (v.getId() == R.id.btn_camera) {
+			finish();
+			startActivity(new Intent(this, TakePicture.class));
 		}
 	}
 

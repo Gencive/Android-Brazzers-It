@@ -24,7 +24,7 @@ public class LocalGallery extends ActionBarActivity implements View.OnClickListe
 	private static final int RELOAD = 1;
 
 	private ImageView selectedImage;
-	private TextView leftButton, rightButton, shareButton, deleteButton;
+	private TextView leftButton, rightButton, shareButton, deleteButton, cameraButton, createButton;
 	private Gallery gallery;
 
 	private ArrayList<String> picturePath;
@@ -34,6 +34,9 @@ public class LocalGallery extends ActionBarActivity implements View.OnClickListe
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gallerie);
+
+		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
 
 		picturePath = FileHelper.getAllFinalPicturePath();
 		if (picturePath.size() == 0) {
@@ -48,11 +51,15 @@ public class LocalGallery extends ActionBarActivity implements View.OnClickListe
 		leftButton = (TextView) findViewById(R.id.btn_left);
 		shareButton = (TextView) findViewById(R.id.btn_share);
 		deleteButton = (TextView) findViewById(R.id.btn_delete);
+		cameraButton = (TextView) findViewById(R.id.btn_camera);
+		createButton = (TextView) findViewById(R.id.btn_create);
 
 		rightButton.setOnClickListener(this);
 		leftButton.setOnClickListener(this);
 		shareButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
+		createButton.setOnClickListener(this);
+		cameraButton.setOnClickListener(this);
 
 		this.picturePosition = getIntent().getExtras().getInt("position");
 
@@ -104,6 +111,12 @@ public class LocalGallery extends ActionBarActivity implements View.OnClickListe
 			getIntent().putExtra("position", picturePosition);
 			finish();
 			startActivity(getIntent());
+		} else if (v.getId() == R.id.btn_camera) {
+			finish();
+			startActivity(new Intent(this, TakePicture.class));
+		} else if (v.getId() == R.id.btn_create) {
+			finish();
+			startActivity(new Intent(this, CreatePicture.class));
 		}
 	}
 }

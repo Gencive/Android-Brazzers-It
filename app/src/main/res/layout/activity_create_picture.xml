@@ -2,7 +2,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.pkesslas.brazzersit.Activity.CreatePicture">
+                tools:context="com.pkesslas.brazzersit.Activity.CreatePicture"
+                android:background="@color/primary_light">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -12,7 +13,7 @@
         android:background="?attr/colorPrimaryDark" />
 
     <LinearLayout
-        android:id="@+id/menu"
+        android:id="@+id/camera_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_toolbar" >
@@ -52,14 +53,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/menu"
+        android:layout_below="@+id/camera_menu"
         android:background="@drawable/browse"/>
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="wrap_content"
+        android:layout_below="@+id/btn_browse"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         />
 
     <TextView

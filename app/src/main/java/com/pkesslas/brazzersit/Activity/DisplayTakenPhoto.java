@@ -32,13 +32,16 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 	private Uri outputUri;
 	private Bitmap finalBitmap;
 
-	private TextView save, delete;
+	private TextView save, delete, buttonHome, buttonCreate;
 	private ImageView pictureView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_taken_photo);
+
+		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
 
 		picturePath = getIntent().getStringExtra("path");
 		getCroppedImage();
@@ -47,9 +50,13 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 
 		save = (TextView) findViewById(R.id.btn_save);
 		delete = (TextView) findViewById(R.id.btn_delete);
+		buttonHome = (TextView) findViewById(R.id.btn_home);
+		buttonCreate = (TextView) findViewById(R.id.btn_create);
 
 		save.setOnClickListener(this);
 		delete.setOnClickListener(this);
+		buttonHome.setOnClickListener(this);
+		buttonCreate.setOnClickListener(this);
 	}
 
 	private void getCroppedImage() {
@@ -101,6 +108,12 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 			FileHelper.saveBitmapToFile(finalBitmap, getFinalPngPath());
 			Toast.makeText(this, "Picture has been saved", Toast.LENGTH_LONG).show();
 			startActivity(new Intent(this, MainActivity.class));
+		} else if (v.getId() == R.id.btn_home) {
+			finish();
+			startActivity(new Intent(this, MainActivity.class));
+		} else if (v.getId() == R.id.btn_create) {
+			finish();
+			startActivity(new Intent(this, CreatePicture.class));
 		}
 		finish();
 	}
