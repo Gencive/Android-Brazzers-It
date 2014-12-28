@@ -26,9 +26,10 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	private Camera camera;
 	private Preview preview;
 	private FrameLayout previewLayout;
-	private TextView takePictureButton;
+	private TextView takePictureButton, flashButton;
 	private Context context;
 	private boolean cameraRelease = false;
+	private boolean flashEnable = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,11 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		preview = new Preview(this, camera);
 		context = this;
 		takePictureButton = (TextView) findViewById(R.id.btn_take_picture);
+		flashButton = (TextView) findViewById(R.id.btn_flash);
+
 		takePictureButton.setOnClickListener(this);
+		flashButton.setOnClickListener(this);
+
 		previewLayout.addView(preview);
 	}
 
@@ -51,6 +56,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		Camera.Parameters parameters = camera.getParameters();
 		List<Camera.Size> list = parameters.getSupportedPictureSizes();
 		setPictureSize(parameters, list);
+		parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
 
 		camera.setParameters(parameters);
 	}
@@ -90,6 +96,28 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	public void onClick(View v) {
 		if (v.getId() == R.id.btn_take_picture) {
 			camera.takePicture(null, null, photoCallback);
+		} else if (v.getId() == R.id.btn_flash) {
+			enableFlash();
+		}
+	}
+
+	private void enableFlash() {
+		if (flashEnable == false) {
+			flashEnable = true;
+			flashButton.setBackground(getResources().getDrawable(R.drawable.flash_on));
+			camera.stopPreview();
+			Camera.Parameters p = camera.getParameters();
+			p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+			camera.setParameters(p);
+			camera.startPreview();
+		} else if (flashEnable == true) {
+			flashEnable = false;
+			flashButton.setBackground(getResources().getDrawable(R.drawable.flash_off));
+			camera.stopPreview();
+			Camera.Parameters p = camera.getParameters();
+			p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+			camera.setParameters(p);
+			camera.startPreview();
 		}
 	}
 

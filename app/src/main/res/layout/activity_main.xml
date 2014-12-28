@@ -3,55 +3,58 @@
 				xmlns:tools="http://schemas.android.com/tools"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				tools:context=".MainActivity">
+				tools:context=".MainActivity"
+                android:background="@color/primary_light">
 
 	<android.support.v7.widget.Toolbar
 		android:id="@+id/my_toolbar"
-		android:layout_height="160dp"
+		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:minHeight="?attr/actionBarSize"
-		android:background="?attr/colorPrimary" />
+		android:background="?attr/colorPrimaryDark" />
 
-	<RelativeLayout
+	<LinearLayout
 		android:id="@+id/menu"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/my_toolbar"
-		android:background="@drawable/menu_bar">
+		android:layout_below="@+id/my_toolbar" >
 
 		<TextView
-			android:id="@+id/btn_camera"
-			android:layout_width="wrap_content"
-			android:layout_marginLeft="40dp"
-			android:layout_marginTop="10dp"
-			android:layout_marginBottom="10dp"
-			android:layout_height="wrap_content"
-			android:background="@drawable/camera"/>
+			android:id="@+id/btn_home"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+			android:background="@drawable/button_home_activate"/>
+
+        <TextView
+            android:id="@+id/btn_camera"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_camera"/>
 
 		<TextView
-			android:id="@+id/btn_upload"
-			android:layout_centerInParent="true"
-			android:layout_marginTop="10dp"
-			android:layout_marginBottom="10dp"
-			android:layout_width="wrap_content"
+			android:id="@+id/btn_create"
+            android:layout_weight="1"
+            android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:background="@drawable/upload"/>
+			android:background="@drawable/button_create"/>
 
 		<TextView
 			android:id="@+id/btn_gallery"
-			android:layout_alignParentRight="true"
-			android:layout_marginRight="40dp"
-			android:layout_marginTop="10dp"
-			android:layout_marginBottom="10dp"
-			android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:background="@drawable/gallery"/>
-	</RelativeLayout>
+			android:background="@drawable/button_online_gallery"/>
+	</LinearLayout>
 
     <ListView
         android:id="@+id/photo_list"
         android:layout_below="@+id/menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:divider="@color/primary_dark"
+        android:dividerHeight="10px"
+        >
     </ListView>
 </RelativeLayout>

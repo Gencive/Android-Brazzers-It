@@ -35,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 		context = this;
 		cameraButton = (TextView) findViewById(R.id.btn_camera);
-		uploadButton = (TextView) findViewById(R.id.btn_upload);
+		uploadButton = (TextView) findViewById(R.id.btn_create);
 		galleryButton = (TextView) findViewById(R.id.btn_gallery);
 
 		cameraButton.setOnClickListener(this);
@@ -88,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	public void onClick(View v) {
 		if (v.getId() == R.id.btn_camera) {
 			startActivity(new Intent(this, TakePicture.class));
-		} else if (v.getId() == R.id.btn_upload) {
+		} else if (v.getId() == R.id.btn_create) {
 			startActivity(new Intent(this, CreatePicture.class));
 		}
 	}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/primary_dark" />
+                </shape>
+            </item>
+            <item android:bottom="3dp" android:right="3dp" android:left="3dp" android:top="3dp">
+                <bitmap android:src="@drawable/gallery"
+                        android:gravity="center|bottom|clip_vertical"/>
+            </item>
+        </layer-list>
+    </item>
+</selector>

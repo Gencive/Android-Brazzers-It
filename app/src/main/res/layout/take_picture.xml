@@ -10,6 +10,22 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 
+    <RelativeLayout
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/shadow_transparent_menu">
+
+        <TextView
+            android:id="@+id/btn_flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/flash_off"
+            android:layout_margin="5dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    
 	<TextView
 		android:id="@+id/brazzers_logo"
 		android:layout_width="175dp"
@@ -22,9 +38,9 @@
 
 	<TextView
 		android:id="@+id/btn_take_picture"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/take_picture"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:background="@drawable/button_take_picture"
 		android:layout_marginBottom="5dp"
 		android:layout_above="@+id/brazzers_logo"
 		android:layout_centerHorizontal="true"/>
