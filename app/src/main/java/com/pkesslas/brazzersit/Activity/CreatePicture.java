@@ -91,7 +91,7 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 			source = Uri.fromFile(new File(picturePath));
 			outputUri = Uri.fromFile(new File(FileHelper.STORAGE_DIR, "tmp_cropped.png"));
 
-			new Crop(source).output(outputUri).withMaxSize(1280, 1280).start(this);
+			new Crop(source).output(outputUri).withAspect(1, 1).start(this);
 		} else if (requestCode == Crop.REQUEST_CROP) {
 			handleCrop(resultCode, data);
 		}

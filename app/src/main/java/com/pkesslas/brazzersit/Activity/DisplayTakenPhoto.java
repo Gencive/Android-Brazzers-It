@@ -42,9 +42,7 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 
 		picturePath = getIntent().getStringExtra("path");
 		getCroppedImage();
-
 		pictureView = (ImageView) findViewById(R.id.taken_photo);
-
 		pictureFile = new File(picturePath);
 
 		save = (TextView) findViewById(R.id.btn_save);
@@ -62,7 +60,7 @@ public class DisplayTakenPhoto extends ActionBarActivity implements View.OnClick
 		source = Uri.fromFile(new File(tmpPath));
 		outputUri = Uri.fromFile(new File(FileHelper.STORAGE_DIR, "tmp_cropped.png"));
 
-		new Crop(source).output(outputUri).withMaxSize(1280, 1280).start(this);
+		new Crop(source).output(outputUri).withAspect(1, 1).start(this);
 	}
 
 	private void displayFinalBitmap(Uri source) {
