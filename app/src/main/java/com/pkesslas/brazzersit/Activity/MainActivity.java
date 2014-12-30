@@ -9,25 +9,23 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pkesslas.brazzersit.R;
-import com.pkesslas.brazzersit.adapter.MainGalleryAdapter;
 import com.pkesslas.brazzersit.adapter.ViewPagerAdapter;
-import com.pkesslas.brazzersit.helper.FileHelper;
-
-import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 	private final static int RELOAD = 1;
-	private TextView cameraButton, uploadButton, galleryButton;
+
+	public final static int HOME_POSITION = 0;
+	public final static int CAMERA_POSITION = 1;
+	public final static int CREATE_POSITION = 2;
+
+	private TextView cameraButton, createButton, galleryButton, homeButton;
 	private ListView photoList;
 	private Context context;
-
-	private static final int NUM_PAGES = 5;
 
 	private ViewPager mPager;
 	private PagerAdapter mPagerAdapter;
@@ -35,47 +33,26 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_activity_slider);
+		setContentView(R.layout.activity_main);
 
-//		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
-//		setSupportActionBar(toolbar);
+		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
 
 		context = this;
-//		cameraButton = (TextView) findViewById(R.id.btn_camera);
-//		uploadButton = (TextView) findViewById(R.id.btn_create);
+		homeButton = (TextView) findViewById(R.id.btn_home);
+		cameraButton = (TextView) findViewById(R.id.btn_camera);
+		createButton = (TextView) findViewById(R.id.btn_create);
 //		galleryButton = (TextView) findViewById(R.id.btn_gallery);
 
-//		cameraButton.setOnClickListener(this);
-//		uploadButton.setOnClickListener(this);
+		cameraButton.setOnClickListener(this);
+		createButton.setOnClickListener(this);
+		homeButton.setOnClickListener(this);
 //		galleryButton.setOnClickListener(this);
 
-//		buildListView();
-
-		// Instantiate a ViewPager and a PagerAdapter.
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(mPagerAdapter);
-	}
-
-	private void buildListView() {
-		ArrayList<String> objects = FileHelper.getAllFinalPicturePath();
-		for (String path : objects) {
-			Log.i("Selected path", path);
-		}
-
-		photoList = (ListView) findViewById(R.id.photo_list);
-		final MainGalleryAdapter adapter = new MainGalleryAdapter(this, objects);
-		photoList.setAdapter(adapter);
-
-		photoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(context, LocalGallery.class);
-
-				intent.putExtra("position", position);
-				startActivityForResult(intent, RELOAD);
-			}
-		});
+		mPager.setOnPageChangeListener(this);
 	}
 
 	@Override
@@ -91,20 +68,71 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.btn_camera) {
-			startActivity(new Intent(this, TakePicture.class));
+		if (v.getId() == R.id.btn_home) {
+			mPager.setCurrentItem(HOME_POSITION);
+		} else if (v.getId() == R.id.btn_camera) {
+			mPager.setCurrentItem(CAMERA_POSITION);
 		} else if (v.getId() == R.id.btn_create) {
-			finish();
-			startActivity(new Intent(this, CreatePicture.class));
+			mPager.setCurrentItem(CREATE_POSITION);
 		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		Log.i("onActivtyResult", "" + requestCode);
 		if (requestCode == RELOAD) {
 			finish();
 			startActivity(getIntent());
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mPager.getCurrentItem() == 0) {
+			// If the user is currently looking at the first step, allow the system to handle the
+			// Back button. This calls finish() on this activity and pops the back stack.
+			super.onBackPressed();
+		} else {
+			// Otherwise, select the previous step.
+			mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+		}
+	}
+	public void onPageScrollStateChanged(int arg0) {
+		int pos = getCurrentSelectedFragmentPosition();
+		System.out.println("position = " + pos);
+		if (pos == 0) {
+			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home_activate));
+			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
+			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
+		} else if (pos == 1) {
+			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera_activate));
+			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
+			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
+		} else if (pos == 2) {
+			createButton.setBackground(getResources().getDrawable(R.drawable.button_create_activate));
+			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
+			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
+		}
+	}
+
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onPageSelected(int arg0) {
+	}
+
+	public int getCurrentSelectedFragmentPosition() {
+		return mPager.getCurrentItem();
+	}
+
+	public void setPagePosition(int position) {
+		mPager.setCurrentItem(position);
+	}
+
+	public void reloadFragment(int position) {
+
 	}
 }

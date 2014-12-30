@@ -1,19 +1,25 @@
-package com.pkesslas.brazzersit.Activity;
+package com.pkesslas.brazzersit.fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pkesslas.brazzersit.Activity.DisplayTakenPhoto;
+import com.pkesslas.brazzersit.Activity.MainActivity;
+import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.helper.FileHelper;
 import com.pkesslas.brazzersit.view.Preview;
-import com.pkesslas.brazzersit.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +28,8 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class TakePicture extends ActionBarActivity implements View.OnClickListener {
+public class TakePictureFragment extends Fragment implements View.OnClickListener {
+	private RelativeLayout rootView;
 	private Camera camera;
 	private Preview preview;
 	private FrameLayout previewLayout;
@@ -32,31 +39,25 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	private boolean flashEnable = false;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.take_picture);
-
-		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
-		setSupportActionBar(toolbar);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		rootView = (RelativeLayout) inflater.inflate(R.layout.take_picture, container, false);
 
 		camera = Camera.open();
 
 		setCameraParameters();
 
-		previewLayout = (FrameLayout) findViewById(R.id.preview);
-		preview = new Preview(this, camera);
-		context = this;
-		takePictureButton = (TextView) findViewById(R.id.btn_take_picture);
-		flashButton = (TextView) findViewById(R.id.btn_flash);
-		buttonHome = (TextView) findViewById(R.id.btn_home);
-		buttonCreate = (TextView) findViewById(R.id.btn_create);
+		context = getActivity();
+		previewLayout = (FrameLayout) rootView.findViewById(R.id.preview);
+		preview = new Preview(context, camera);
+		takePictureButton = (TextView) rootView.findViewById(R.id.btn_take_picture);
+		flashButton = (TextView) rootView.findViewById(R.id.btn_flash);
 
 		takePictureButton.setOnClickListener(this);
 		flashButton.setOnClickListener(this);
-		buttonHome.setOnClickListener(this);
-		buttonCreate.setOnClickListener(this);
 
 		previewLayout.addView(preview);
+
+		return rootView;
 	}
 
 	private void setCameraParameters() {
@@ -88,7 +89,7 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 	public void onPause() {
 		super.onPause();
 		if (cameraRelease == false) {
-			camera.stopPreview();
+//			camera.stopPreview();
 		}
 	}
 
@@ -173,6 +174,5 @@ public class TakePicture extends ActionBarActivity implements View.OnClickListen
 		Log.i("Photo path", photo.getAbsolutePath());
 		intent.putExtra("path", photo.getAbsolutePath());
 		startActivity(intent);
-		finish();
 	}
 }

@@ -1,18 +1,22 @@
-package com.pkesslas.brazzersit.Activity;
+package com.pkesslas.brazzersit.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pkesslas.brazzersit.Activity.LocalGallery;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.adapter.GalleryAdapter;
 import com.pkesslas.brazzersit.helper.FileHelper;
@@ -20,54 +24,50 @@ import com.pkesslas.brazzersit.helper.FileHelper;
 import java.io.File;
 import java.util.ArrayList;
 
-public class LocalGallery extends ActionBarActivity implements View.OnClickListener {
+public class LocalGalleryFragment extends Fragment implements View.OnClickListener {
 	private static final int RELOAD = 1;
 
 	private ImageView selectedImage;
-	private TextView leftButton, rightButton, shareButton, deleteButton, cameraButton, createButton;
+	private TextView leftButton, rightButton, shareButton, deleteButton;
 	private Gallery gallery;
+	private GalleryAdapter galleryAdapter;
+	private RelativeLayout rootView;
 
 	private ArrayList<String> picturePath;
 	public int picturePosition;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_gallerie);
-
-		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
-		setSupportActionBar(toolbar);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		rootView = (RelativeLayout) inflater.inflate(R.layout.activity_gallerie, container, false);
 
 		picturePath = FileHelper.getAllFinalPicturePath();
 		if (picturePath.size() == 0) {
-			finishActivity(RELOAD);
-			finish();
-			return;
+			// TODO
+			return rootView;
 		}
 
-		gallery = (android.widget.Gallery) findViewById(R.id.gallery1);
-		selectedImage = (ImageView)findViewById(R.id.picture);
-		rightButton = (TextView) findViewById(R.id.btn_right);
-		leftButton = (TextView) findViewById(R.id.btn_left);
-		shareButton = (TextView) findViewById(R.id.btn_share);
-		deleteButton = (TextView) findViewById(R.id.btn_delete);
-		cameraButton = (TextView) findViewById(R.id.btn_camera);
-		createButton = (TextView) findViewById(R.id.btn_create);
+		gallery = (Gallery) rootView.findViewById(R.id.gallery1);
+		selectedImage = (ImageView) rootView.findViewById(R.id.picture);
+		rightButton = (TextView) rootView.findViewById(R.id.btn_right);
+		leftButton = (TextView) rootView.findViewById(R.id.btn_left);
+		shareButton = (TextView) rootView.findViewById(R.id.btn_share);
+		deleteButton = (TextView) rootView.findViewById(R.id.btn_delete);
 
 		rightButton.setOnClickListener(this);
 		leftButton.setOnClickListener(this);
 		shareButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
-		createButton.setOnClickListener(this);
-		cameraButton.setOnClickListener(this);
 
-		this.picturePosition = getIntent().getExtras().getInt("position");
+		//this.picturePosition = getActivity().getIntent().getExtras().getInt("position");
+
+		this.picturePosition = getArguments().getInt("position");
 
 		Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 		selectedImage.setImageBitmap(bmp);
 
 		gallery.setSpacing(1);
-		gallery.setAdapter(new GalleryAdapter(this, picturePath));
+		galleryAdapter = new GalleryAdapter(getActivity(), picturePath);
+		gallery.setAdapter(galleryAdapter);
 		gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				picturePosition = position;
@@ -75,6 +75,8 @@ public class LocalGallery extends ActionBarActivity implements View.OnClickListe
 				selectedImage.setImageBitmap(bmp);
 			}
 		});
+
+		return rootView;
 	}
 
 	@Override
@@ -104,13 +106,12 @@ public class LocalGallery extends ActionBarActivity implements View.OnClickListe
 
 			if (picturePosition >= picturePath.size() - 1) {
 				picturePosition--;
-			} else {
-				picturePosition++;
 			}
 
-			getIntent().putExtra("position", picturePosition);
-			finish();
-			startActivity(getIntent());
+			galleryAdapter.notifyDataSetChanged();
+			// TODO: RELOAD FRAGMENT
+			//getIntent().putExtra("position", picturePosition);
+			//startActivity(getIntent());
 		}
 	}
 }

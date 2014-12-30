@@ -5,51 +5,8 @@
 				tools:context="com.pkesslas.brazzersit.Activity.TakePicture"
 				android:background="@color/primary">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimaryDark" />
-
-    <LinearLayout
-        android:id="@+id/menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/my_toolbar" >
-
-        <TextView
-            android:id="@+id/btn_home"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_home"/>
-
-        <TextView
-            android:id="@+id/btn_camera"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_camera_activate"/>
-
-        <TextView
-            android:id="@+id/btn_create"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_create"/>
-
-        <TextView
-            android:id="@+id/btn_gallery"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_online_gallery"/>
-    </LinearLayout>
-
 	<FrameLayout
 		android:id="@+id/preview"
-        android:layout_below="@+id/menu"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
     </FrameLayout>
