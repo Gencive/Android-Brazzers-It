@@ -1,20 +1,25 @@
-package com.pkesslas.brazzersit.Activity;
+package com.pkesslas.brazzersit.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pkesslas.brazzersit.Activity.MainActivity;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.helper.BitmapHelper;
 import com.pkesslas.brazzersit.helper.FileHelper;
@@ -23,56 +28,46 @@ import com.soundcloud.android.crop.Crop;
 import java.io.File;
 import java.io.IOException;
 
-public class CreatePicture extends ActionBarActivity implements View.OnClickListener {
+public class CreatePictureFragment extends Fragment implements View.OnClickListener {
 	private static int RESULT_LOAD_IMAGE = 1;
 
-	private TextView browseButton, saveButton, deleteButton, homeButton, cameraButton;
+	private RelativeLayout rootView;
+	private TextView browseButton, saveButton, deleteButton;
 
 	private Bitmap finalBitmap;
 	private Uri source, outputUri;
+	private Context context;
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_create_picture);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		rootView = (RelativeLayout) inflater.inflate(R.layout.activity_create_picture, container, false);
 
-		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
-		setSupportActionBar(toolbar);
 
-		browseButton = (TextView) findViewById(R.id.btn_browse);
-		saveButton = (TextView) findViewById(R.id.btn_save);
-		deleteButton = (TextView) findViewById(R.id.btn_delete);
-		homeButton = (TextView) findViewById(R.id.btn_home);
-		cameraButton = (TextView) findViewById(R.id.btn_camera);
+		context = getActivity();
+		browseButton = (TextView) rootView.findViewById(R.id.btn_browse);
+		saveButton = (TextView) rootView.findViewById(R.id.btn_save);
+		deleteButton = (TextView) rootView.findViewById(R.id.btn_delete);
 
 		browseButton.setOnClickListener(this);
 		saveButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
-		homeButton.setOnClickListener(this);
-		cameraButton.setOnClickListener(this);
+
+		return rootView;
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btn_browse) {
-			Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 			startActivityForResult(intent, RESULT_LOAD_IMAGE);
 		} else if (v.getId() == R.id.btn_delete) {
-			Toast.makeText(this, "Picture hasn't been saved", Toast.LENGTH_LONG).show();
-			startActivity(new Intent(this, MainActivity.class));
-			finish();
+			Toast.makeText(context, "Picture hasn't been saved", Toast.LENGTH_LONG).show();
+			((MainActivity)getActivity()).setPagePosition(MainActivity.HOME_POSITION);
 		} else if (v.getId() == R.id.btn_save) {
 			FileHelper.saveBitmapToFile(finalBitmap, getFinalPngPath());
-			Toast.makeText(this, "Picture has been saved", Toast.LENGTH_LONG).show();
-			startActivity(new Intent(this, MainActivity.class));
-			finish();
-		} else if (v.getId() == R.id.btn_home) {
-			finish();
-			startActivity(new Intent(this, MainActivity.class));
-		} else if (v.getId() == R.id.btn_camera) {
-			finish();
-			startActivity(new Intent(this, TakePicture.class));
+			Toast.makeText(context, "Picture has been saved", Toast.LENGTH_LONG).show();
+			((MainActivity)getActivity()).setPagePosition(MainActivity.HOME_POSITION);
 		}
 	}
 
@@ -81,20 +76,19 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		Log.i("CreatePictureFragment", "onActivityResult");
 
-		if (resultCode == RESULT_CANCELED) {
-			finish();
-			startActivity(getIntent());
+		if (resultCode == getActivity().RESULT_CANCELED) {
 		}
-		if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+		if (requestCode == RESULT_LOAD_IMAGE && resultCode == getActivity().RESULT_OK && null != data) {
 			Uri selectedImage = data.getData();
 			String[] filePathColumn = {
 					MediaStore.Images.Media.DATA
 			};
 
-			Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+			Cursor cursor = context.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 			cursor.moveToFirst();
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -104,27 +98,29 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 			source = Uri.fromFile(new File(picturePath));
 			outputUri = Uri.fromFile(new File(FileHelper.STORAGE_DIR, "tmp_cropped.png"));
 
-			new Crop(source).output(outputUri).withAspect(1, 1).start(this);
+			new Crop(source).output(outputUri).withAspect(1, 1).start(context, this);
 		} else if (requestCode == Crop.REQUEST_CROP) {
 			handleCrop(resultCode, data);
 		}
 	}
 
 	private void handleCrop(int resultCode, Intent result) {
-		if (resultCode == RESULT_OK) {
-			ImageView imageView = (ImageView) findViewById(R.id.image);
+		Log.i("CreatePictureFragment", "handleCrop");
+		if (resultCode == getActivity().RESULT_OK) {
+			ImageView imageView = (ImageView) rootView.findViewById(R.id.image);
 			try {
-				finalBitmap = createFinalBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), Crop.getOutput(result)), 25);
+				finalBitmap = createFinalBitmap(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Crop.getOutput(result)), 25);
 				imageView.setImageBitmap(finalBitmap);
 
 				saveButton.setVisibility(View.VISIBLE);
 				deleteButton.setVisibility(View.VISIBLE);
+				File file = new File(FileHelper.STORAGE_DIR, "tmp_cropped.png");
+				FileHelper.deleteFile(file.getAbsolutePath());
 			} catch (IOException e) {
-				finish();
-				startActivity(getIntent());
+				startActivity(getActivity().getIntent());
 			}
 		} else if (resultCode == Crop.RESULT_ERROR) {
-			Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
 

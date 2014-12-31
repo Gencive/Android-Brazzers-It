@@ -1,1 +1,1 @@
-include ':app', ':android-crop'
+include ':app', ':android-crop', ':lib'
