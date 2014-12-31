@@ -3,7 +3,6 @@ package com.pkesslas.brazzersit.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -14,6 +13,9 @@ import android.widget.TextView;
 
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.adapter.ViewPagerAdapter;
+import com.pkesslas.brazzersit.fragment.DisplayTakenPhotoFragment;
+import com.pkesslas.brazzersit.fragment.HomeFragment;
+import com.pkesslas.brazzersit.fragment.LocalGalleryFragment;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
@@ -28,7 +30,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	private Context context;
 
 	private ViewPager mPager;
-	private PagerAdapter mPagerAdapter;
+	private ViewPagerAdapter mPagerAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +92,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	@Override
 	public void onBackPressed() {
 		if (mPager.getCurrentItem() == 0) {
-			// If the user is currently looking at the first step, allow the system to handle the
-			// Back button. This calls finish() on this activity and pops the back stack.
-			super.onBackPressed();
+			if (mPagerAdapter.getItem(0) instanceof LocalGalleryFragment) {
+				((LocalGalleryFragment) mPagerAdapter.getItem(0)).backPressed();
+			} else if (mPagerAdapter.getItem(0) instanceof HomeFragment) {
+				finish();
+			}
+			else if (mPagerAdapter.getItem(0) instanceof DisplayTakenPhotoFragment) {
+				((DisplayTakenPhotoFragment) mPagerAdapter.getItem(0)).backPressed();
+			}
 		} else {
 			// Otherwise, select the previous step.
 			mPager.setCurrentItem(mPager.getCurrentItem() - 1);
 		}
 	}
+
 	public void onPageScrollStateChanged(int arg0) {
 		int pos = getCurrentSelectedFragmentPosition();
 		System.out.println("position = " + pos);
@@ -118,7 +126,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void onPageSelected(int arg0) {
@@ -130,9 +137,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 	public void setPagePosition(int position) {
 		mPager.setCurrentItem(position);
-	}
-
-	public void reloadFragment(int position) {
-
 	}
 }

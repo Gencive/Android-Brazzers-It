@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pkesslas.brazzersit.Activity.MainActivity;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.helper.BitmapHelper;
 import com.pkesslas.brazzersit.helper.FileHelper;
+import com.pkesslas.brazzersit.interfaces.FirstPageFragmentListener;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -33,18 +34,25 @@ public class DisplayTakenPhotoFragment extends Fragment implements View.OnClickL
 	private Uri source;
 	private Uri outputUri;
 	private Bitmap finalBitmap;
-
+	private FirstPageFragmentListener listener;
 	private Context context;
 	private RelativeLayout rootView;
 	private TextView save, delete, buttonHome, buttonCreate;
 	private ImageView pictureView;
+
+	public DisplayTakenPhotoFragment() {
+	}
+
+	public DisplayTakenPhotoFragment(FirstPageFragmentListener listener) {
+		this.listener = listener;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = (RelativeLayout) inflater.inflate(R.layout.activity_display_taken_photo, container, false);
 
 		context = getActivity();
-		picturePath = getActivity().getIntent().getStringExtra("path");
+		picturePath = getArguments().getString("path");
 		getCroppedImage();
 		pictureView = (ImageView) rootView.findViewById(R.id.taken_photo);
 		pictureFile = new File(picturePath);
@@ -66,7 +74,7 @@ public class DisplayTakenPhotoFragment extends Fragment implements View.OnClickL
 		source = Uri.fromFile(new File(tmpPath));
 		outputUri = Uri.fromFile(new File(FileHelper.STORAGE_DIR, "tmp_cropped.png"));
 
-		new Crop(source).output(outputUri).withAspect(1, 1).start(getActivity());
+		new Crop(source).output(outputUri).withAspect(1, 1).start(getActivity(), this);
 	}
 
 	private void displayFinalBitmap(Uri source) {
@@ -102,22 +110,26 @@ public class DisplayTakenPhotoFragment extends Fragment implements View.OnClickL
 		if (v.getId() == R.id.btn_delete) {
 			pictureFile.delete();
 			Toast.makeText(context, "Picture hasn't been saved", Toast.LENGTH_LONG).show();
-			startActivity(new Intent(context, TakePictureFragment.class));
+			listener.onSwitchToNextTakePictureFragment();
 		} else if (v.getId() == R.id.btn_save) {
 			FileHelper.saveBitmapToFile(finalBitmap, getFinalPngPath());
 			Toast.makeText(context, "Picture has been saved", Toast.LENGTH_LONG).show();
-			startActivity(new Intent(context, HomeFragment.class));
+			listener.onSwitchToNextTakePictureFragment();
 		}
 	}
 
 	private String getFinalPngPath() {
 		return new File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + FileHelper.createImageName("BRZ");
 	}
-/*
+
+	public void backPressed() {
+		this.listener.onSwitchToNextTakePictureFragment();
+	}
+
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent result) {
-		if (resultCode == Crop.RESULT_CANCELED) {
-			startActivity(new Intent(this, TakePicture.class));
+	public void onActivityResult(int requestCode, int resultCode, Intent result) {
+		if (resultCode == getActivity().RESULT_CANCELED) {
+			listener.onSwitchToNextTakePictureFragment();
 		}
 		if (requestCode == Crop.REQUEST_CROP) {
 			handleCrop(resultCode, result);
@@ -125,11 +137,11 @@ public class DisplayTakenPhotoFragment extends Fragment implements View.OnClickL
 	}
 
 	private void handleCrop(int resultCode, Intent result) {
-		if (resultCode == Crop.RESULT_OK) {
+		if (resultCode == getActivity().RESULT_OK) {
 			displayFinalBitmap(Crop.getOutput(result));
 		} else if (resultCode == Crop.RESULT_ERROR) {
-			Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
-*/
+
 }

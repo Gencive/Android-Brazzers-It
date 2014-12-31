@@ -1,12 +1,10 @@
 package com.pkesslas.brazzersit.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.pkesslas.brazzersit.Activity.DisplayTakenPhoto;
-import com.pkesslas.brazzersit.Activity.MainActivity;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.helper.FileHelper;
+import com.pkesslas.brazzersit.interfaces.FirstPageFragmentListener;
 import com.pkesslas.brazzersit.view.Preview;
 
 import java.io.File;
@@ -37,6 +34,14 @@ public class TakePictureFragment extends Fragment implements View.OnClickListene
 	private Context context;
 	private boolean cameraRelease = false;
 	private boolean flashEnable = false;
+
+	private FirstPageFragmentListener listener;
+
+	public TakePictureFragment() {}
+
+	public TakePictureFragment(FirstPageFragmentListener listener) {
+		this.listener = listener;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,10 +174,11 @@ public class TakePictureFragment extends Fragment implements View.OnClickListene
 
 	protected void goToDisplayPicture(File photo) {
 		cameraRelease = true;
-		camera.release();
-		Intent intent = new Intent(context, DisplayTakenPhoto.class);
-		Log.i("Photo path", photo.getAbsolutePath());
-		intent.putExtra("path", photo.getAbsolutePath());
-		startActivity(intent);
+		//camera.release();
+
+		Bundle bundle = new Bundle();
+		bundle.putString("path", photo.getAbsolutePath());
+
+		listener.onSwitchToNextTakePictureFragment(bundle);
 	}
 }
