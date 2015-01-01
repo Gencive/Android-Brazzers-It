@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pkesslas.brazzersit.Activity.MainActivity;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.helper.BitmapHelper;
 import com.pkesslas.brazzersit.helper.FileHelper;
@@ -49,7 +48,7 @@ public class DisplayTakenPhotoFragment extends Fragment implements View.OnClickL
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = (RelativeLayout) inflater.inflate(R.layout.activity_display_taken_photo, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_display_taken_photo, container, false);
 
 		context = getActivity();
 		picturePath = getArguments().getString("path");
