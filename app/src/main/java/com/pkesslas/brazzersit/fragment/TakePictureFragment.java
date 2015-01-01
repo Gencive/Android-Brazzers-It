@@ -93,15 +93,14 @@ public class TakePictureFragment extends Fragment implements View.OnClickListene
 	@Override
 	public void onPause() {
 		super.onPause();
-		if (cameraRelease == false) {
-//			camera.stopPreview();
-		}
+
+		camera.lock();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		camera.release();
+		releaseCamera();
 		Log.d("CAMERA", "Destroy");
 	}
 
@@ -115,23 +114,19 @@ public class TakePictureFragment extends Fragment implements View.OnClickListene
 	}
 
 	private void enableFlash() {
+		Camera.Parameters p;
+		p = camera.getParameters();
+		camera.stopPreview();
 		if (flashEnable == false) {
-			flashEnable = true;
 			flashButton.setBackground(getResources().getDrawable(R.drawable.flash_on));
-			camera.stopPreview();
-			Camera.Parameters p = camera.getParameters();
 			p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-			camera.setParameters(p);
-			camera.startPreview();
 		} else if (flashEnable == true) {
-			flashEnable = false;
 			flashButton.setBackground(getResources().getDrawable(R.drawable.flash_off));
-			camera.stopPreview();
-			Camera.Parameters p = camera.getParameters();
 			p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-			camera.setParameters(p);
-			camera.startPreview();
 		}
+		flashEnable = !flashEnable;
+		camera.setParameters(p);
+		camera.startPreview();
 	}
 
 	private static File getOutputMediaFile() {
@@ -173,12 +168,17 @@ public class TakePictureFragment extends Fragment implements View.OnClickListene
 	};
 
 	protected void goToDisplayPicture(File photo) {
-		cameraRelease = true;
-		//camera.release();
-
+		releaseCamera();
 		Bundle bundle = new Bundle();
 		bundle.putString("path", photo.getAbsolutePath());
 
 		listener.onSwitchToNextTakePictureFragment(bundle);
+	}
+
+	private void releaseCamera() {
+		if (camera != null) {
+			camera.release();
+			camera = null;
+		}
 	}
 }
