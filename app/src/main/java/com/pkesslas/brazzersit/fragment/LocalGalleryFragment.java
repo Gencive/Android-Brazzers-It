@@ -116,21 +116,19 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btn_left) {
-			if (picturePosition - 1 >= 0) {
+			if (picturePosition == 0) {
+				picturePosition = galleryAdapter.getCount() - 1;
+			} else {
 				picturePosition--;
-				Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
-				selectedImage.setImageBitmap(bmp);
-				galleryAdapter.getItem(picturePosition);
-				gallery.setSelection(picturePosition);
 			}
+			reloadImageView();
 		} else if (v.getId() == R.id.btn_right) {
-			if (picturePosition + 1 < picturePath.size()) {
+			if (picturePosition == galleryAdapter.getCount() - 1) {
+				picturePosition = 0;
+			} else {
 				picturePosition++;
-				Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
-				selectedImage.setImageBitmap(bmp);
-				galleryAdapter.getItemId(picturePosition);
-				gallery.setSelection(picturePosition);
 			}
+			reloadImageView();
 		} else if (v.getId() == R.id.btn_share) {
 			Intent shareIntent = new Intent(Intent.ACTION_SEND);
 			shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -149,6 +147,13 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 			Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 			selectedImage.setImageBitmap(bmp);
 		}
+	}
+
+	private void reloadImageView() {
+		Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
+		selectedImage.setImageBitmap(bmp);
+		galleryAdapter.getItemId(picturePosition);
+		gallery.setSelection(picturePosition);
 	}
 
 	public void backPressed() {
