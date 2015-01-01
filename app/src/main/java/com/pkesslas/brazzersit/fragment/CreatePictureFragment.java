@@ -27,6 +27,7 @@ import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class CreatePictureFragment extends Fragment implements View.OnClickListener {
 	private static int RESULT_LOAD_IMAGE = 1;
@@ -41,7 +42,7 @@ public class CreatePictureFragment extends Fragment implements View.OnClickListe
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = (RelativeLayout) inflater.inflate(R.layout.activity_create_picture, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_create_picture, container, false);
 
 
 		context = getActivity();
@@ -83,19 +84,7 @@ public class CreatePictureFragment extends Fragment implements View.OnClickListe
 		if (resultCode == getActivity().RESULT_CANCELED) {
 		}
 		if (requestCode == RESULT_LOAD_IMAGE && resultCode == getActivity().RESULT_OK && null != data) {
-			Uri selectedImage = data.getData();
-			String[] filePathColumn = {
-					MediaStore.Images.Media.DATA
-			};
-
-			Cursor cursor = context.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-			cursor.moveToFirst();
-
-			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			String picturePath = cursor.getString(columnIndex);
-			cursor.close();
-
-			source = Uri.fromFile(new File(picturePath));
+			source = data.getData();
 			outputUri = Uri.fromFile(new File(FileHelper.STORAGE_DIR, "tmp_cropped.png"));
 
 			new Crop(source).output(outputUri).withAspect(1, 1).start(context, this);

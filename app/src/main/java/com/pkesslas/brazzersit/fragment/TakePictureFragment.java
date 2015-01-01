@@ -94,7 +94,9 @@ public class TakePictureFragment extends Fragment implements View.OnClickListene
 	public void onPause() {
 		super.onPause();
 
-		camera.lock();
+		if (camera != null) {
+			camera.lock();
+		}
 	}
 
 	@Override
