@@ -6,21 +6,27 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseUser;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.adapter.ViewPagerAdapter;
 import com.pkesslas.brazzersit.fragment.DisplayTakenPhotoFragment;
 import com.pkesslas.brazzersit.fragment.HomeFragment;
 import com.pkesslas.brazzersit.fragment.LocalGalleryFragment;
+import com.pkesslas.brazzersit.helper.NetworkHelper;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 	private final static int RELOAD = 1;
 
+	private ParseUser currentUser;
 	public final static int HOME_POSITION = 0;
 	public final static int CAMERA_POSITION = 1;
 	public final static int CREATE_POSITION = 2;
@@ -37,6 +43,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		currentUser = ParseUser.getCurrentUser();
+		if (currentUser == null && NetworkHelper.isInternetAvailable(this)) {
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
+		}
+
+		//currentUser.logOut();
 		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
 		setSupportActionBar(toolbar);
 
@@ -61,8 +74,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 
-		if (id == R.id.action_settings) {
+		if (id == R.id.logout) {
+			ParseUser.getCurrentUser().logOut();
+			finish();
+			startActivity(getIntent());
 			return true;
+		} else if (id == R.id.signin) {
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -122,6 +141,17 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		if (ParseUser.getCurrentUser() != null && NetworkHelper.isInternetAvailable(this) && ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+			inflater.inflate(R.menu.menu_main_logout, menu);
+		} else {
+			inflater.inflate(R.menu.menu_main_logged, menu);
+		}
+		return true;
 	}
 
 	public void onPageScrolled(int arg0, float arg1, int arg2) {

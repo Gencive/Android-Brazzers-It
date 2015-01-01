@@ -8,5 +8,23 @@
     <string name="title_activity_display_taken_photo">DisplayTakenPhoto</string>
     <string name="title_activity_gallerie">gallerie</string>
     <string name="title_activity_create_picture">CreatePicture</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_create_account">CreateAccountActivity</string>
 
+    <string name="login_password_forgotten"><u>Forgot your password ?</u></string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_password_repeat">Repeat Password</string>
+    <string name="login_skip">SKIP</string>
+    <string name="login_confirm">Sign In</string>
+    <string name="login_confirm_error">Error</string>
+    <string name="login_confirm_valid">Logged</string>
+    <string name="login_confirm_loading">Loading</string>
+    <string name="login_create_account">CREATE ACCOUNT</string>
+    <string name="login_email">Email Address</string>
+
+    <string name="account_creation_valid">Created</string>
+    <string name="account_creation_error">Error</string>
+
+    <string name="menu_logout">Logout</string>
 </resources>

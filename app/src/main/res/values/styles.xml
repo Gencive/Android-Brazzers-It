@@ -7,7 +7,7 @@
 		<item name="colorPrimary">@color/primary</item>
 		<!-- colorPrimaryDark is used for the status bar -->
 		<item name="colorPrimaryDark">@color/primary_dark</item>
-
+        <item name="android:textColorTertiary">@color/primary_text</item>
 		<!-- colorAccent is used as the default value for colorControlActivated
 			 which is used to tint widgets -->
 		<item name="colorAccent">@color/accent</item>
@@ -16,9 +16,15 @@
 		<item name="android:divider">@color/divider</item>
 		<item name="android:icon">@color/icons</item>
 
+        <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
+
         <!-- Android Crop Theme -->
         <item name="showThirds">true</item>
         <item name="showHandles">always</item>
         <item name="highlightColor">#FFFFFF</item>
 	</style>
+
+    <style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/primary_text</item>
+    </style>
 </resources>

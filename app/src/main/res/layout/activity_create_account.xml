@@ -1,0 +1,128 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/brazzers"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="40dp"/>
+
+    <RelativeLayout
+        android:id="@+id/form_loggin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/primary_light">
+
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:hint="@string/login_username"
+            android:textColor="@color/background_floating_material_dark"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:inputType="text"/>
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/username"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:layout_below="@+id/separator"
+            android:hint="@string/login_password"
+            android:textColor="@color/background_floating_material_dark"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:inputType="textPassword"/>
+        <View
+            android:id="@+id/separator2"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/password"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/repeat_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:layout_below="@+id/separator2"
+            android:hint="@string/login_password_repeat"
+            android:textColor="@color/background_floating_material_dark"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:inputType="textPassword"/>
+
+        <View
+            android:id="@+id/separator3"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/repeat_password"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:layout_below="@+id/separator3"
+            android:hint="@string/login_email"
+            android:textColor="@color/background_floating_material_dark"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:inputType="textEmailAddress"
+            />
+
+        <com.dd.processbutton.iml.ActionProcessButton
+            android:id="@+id/btn_create_account"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/login_create_account"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/email"
+            custom:pb_textProgress="In progress"
+            custom:pb_textComplete="@string/account_creation_valid"
+            custom:pb_textError="@string/account_creation_error"
+            custom:pb_colorNormal="@color/primary"
+            custom:pb_colorPressed="@color/accent" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/accent"
+        android:text="@string/crop__cancel"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:layout_margin="20dp"/>
+
+</RelativeLayout>
