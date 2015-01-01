@@ -53,7 +53,7 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d("LocalGalleryFragment", "onCreateView");
-		rootView = (RelativeLayout) inflater.inflate(R.layout.activity_gallerie, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_gallerie, container, false);
 
 		picturePath = FileHelper.getAllFinalPicturePath();
 		if (picturePath.size() == 0) {
@@ -110,6 +110,7 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 				selectedImage.setImageBitmap(bmp);
 			}
 		});
+		gallery.setSelection(picturePosition);
 	}
 
 	@Override
@@ -120,6 +121,7 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 				Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 				selectedImage.setImageBitmap(bmp);
 				galleryAdapter.getItem(picturePosition);
+				gallery.setSelection(picturePosition);
 			}
 		} else if (v.getId() == R.id.btn_right) {
 			if (picturePosition + 1 < picturePath.size()) {
@@ -127,6 +129,7 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 				Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 				selectedImage.setImageBitmap(bmp);
 				galleryAdapter.getItemId(picturePosition);
+				gallery.setSelection(picturePosition);
 			}
 		} else if (v.getId() == R.id.btn_share) {
 			Intent shareIntent = new Intent(Intent.ACTION_SEND);
