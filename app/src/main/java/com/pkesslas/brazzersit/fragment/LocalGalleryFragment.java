@@ -171,7 +171,11 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 			selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 			selectedImage.setImageBitmap(selectedBitmap);
 		} else if (v.getId() == R.id.btn_upload) {
-			getTitle(null);
+			if (NetworkHelper.isInternetAvailable(getActivity())) {
+				getTitle(null);
+			} else {
+				Toast.makeText(getActivity(), "An internet connection is required.", Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 
