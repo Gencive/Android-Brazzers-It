@@ -58,6 +58,14 @@
         android:layout_marginEnd="20dp"
     />
 
+        <TextView
+            android:id="@+id/btn_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            android:background="@drawable/upload_file"/>
+
     <TextView
         android:id="@+id/btn_delete"
         android:layout_width="wrap_content"

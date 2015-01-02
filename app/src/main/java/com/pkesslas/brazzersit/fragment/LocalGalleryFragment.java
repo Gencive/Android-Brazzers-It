@@ -1,5 +1,8 @@
 package com.pkesslas.brazzersit.fragment;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,17 +13,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
+import com.parse.SaveCallback;
 import com.pkesslas.brazzersit.R;
 import com.pkesslas.brazzersit.adapter.GalleryAdapter;
 import com.pkesslas.brazzersit.helper.FileHelper;
+import com.pkesslas.brazzersit.helper.NetworkHelper;
 import com.pkesslas.brazzersit.interfaces.FirstPageFragmentListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -29,8 +45,9 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 
 	private FirstPageFragmentListener listener;
 	private ImageView selectedImage;
-	private TextView leftButton, rightButton, shareButton, deleteButton;
+	private TextView leftButton, rightButton, shareButton, deleteButton, uploadButton;
 	private Gallery gallery;
+	private Bitmap selectedBitmap;
 	private GalleryAdapter galleryAdapter;
 	private RelativeLayout rootView;
 
@@ -53,7 +70,7 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d("LocalGalleryFragment", "onCreateView");
-		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_gallerie, container, false);
+		rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_gallery, container, false);
 
 		picturePath = FileHelper.getAllFinalPicturePath();
 		if (picturePath.size() == 0) {
@@ -69,7 +86,9 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 		leftButton = (TextView) rootView.findViewById(R.id.btn_left);
 		shareButton = (TextView) rootView.findViewById(R.id.btn_share);
 		deleteButton = (TextView) rootView.findViewById(R.id.btn_delete);
+		uploadButton = (TextView) rootView.findViewById(R.id.btn_upload);
 
+		uploadButton.setOnClickListener(this);
 		rightButton.setOnClickListener(this);
 		leftButton.setOnClickListener(this);
 		shareButton.setOnClickListener(this);
@@ -81,8 +100,13 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 			this.picturePosition = getArguments().getInt("position");
 		}
 
-		Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
-		selectedImage.setImageBitmap(bmp);
+
+		if (ParseUser.getCurrentUser() != null && NetworkHelper.isInternetAvailable(getActivity()) && !ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+			uploadButton.setVisibility(View.VISIBLE);
+		}
+
+		selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
+		selectedImage.setImageBitmap(selectedBitmap);
 
 		buildGallery();
 
@@ -144,14 +168,67 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 				picturePosition--;
 			}
 			buildGallery();
-			Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
-			selectedImage.setImageBitmap(bmp);
+			selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
+			selectedImage.setImageBitmap(selectedBitmap);
+		} else if (v.getId() == R.id.btn_upload) {
+			getTitle(null);
 		}
 	}
 
+	private void getTitle(String error) {
+		final EditText title = new EditText(getActivity());
+		if (error != null) {
+			title.setError(error);
+		}
+		title.setInputType(EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+		title.setHint("Your picture title");
+		title.setTextColor(getResources().getColor(R.color.primary_text));
+		new AlertDialog.Builder(getActivity())
+				.setTitle("Name your picture")
+				.setView(title)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(final DialogInterface dialog, int whichButton) {
+						if (title.getText().length() >= 3 && title.getText().length() < 120) {
+							final ProgressDialog loadingDialog = ProgressDialog.show(getActivity(), "Uploading", "Uploading. Please wait...", true);
+							uploadPicture(loadingDialog, title);
+						} else {
+							getTitle("Invalid title name, too short or too long.");
+						}
+					}
+				}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			}
+		}).show();
+	}
+
+	private void uploadPicture(final DialogInterface dialog, EditText title) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		selectedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		byte[] byteArray = stream.toByteArray();
+
+		ParseFile file = new ParseFile("image.png", byteArray);
+		ParseObject imageObject = new ParseObject("Image");
+
+		imageObject.put("user", ParseUser.getCurrentUser());
+		imageObject.put("title", title.getText().toString());
+		imageObject.put("point", 0);
+		imageObject.put("image", file);
+		imageObject.saveInBackground(new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				dialog.dismiss();
+				if (e == null) {
+					Toast.makeText(getActivity(), "Upload succed", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+	}
+
 	private void reloadImageView() {
-		Bitmap bmp = BitmapFactory.decodeFile(picturePath.get(picturePosition));
-		selectedImage.setImageBitmap(bmp);
+		selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
+		selectedImage.setImageBitmap(selectedBitmap);
 		galleryAdapter.getItemId(picturePosition);
 		gallery.setSelection(picturePosition);
 	}
