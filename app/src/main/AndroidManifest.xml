@@ -10,12 +10,12 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
-        android:theme="@style/AppTheme"
-        android:name=".MyApplication">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".Activity.MainActivity"
             android:label="@string/app_name"
@@ -40,12 +40,14 @@
             android:name=".Activity.CreateAccountActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_create_account"
+            android:screenOrientation="portrait"
             android:noHistory="true" >
         </activity>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <activity
+            android:name=".Activity.OnlineGalleryActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

@@ -9,6 +9,7 @@ import com.pkesslas.brazzersit.fragment.CreatePictureFragment;
 import com.pkesslas.brazzersit.fragment.DisplayTakenPhotoFragment;
 import com.pkesslas.brazzersit.fragment.HomeFragment;
 import com.pkesslas.brazzersit.fragment.LocalGalleryFragment;
+import com.pkesslas.brazzersit.fragment.OnlineGalleryFragment;
 import com.pkesslas.brazzersit.fragment.TakePictureFragment;
 import com.pkesslas.brazzersit.interfaces.FirstPageFragmentListener;
 
@@ -16,7 +17,7 @@ import com.pkesslas.brazzersit.interfaces.FirstPageFragmentListener;
  * Created by Pierre-Elie on 30/12/14.
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
-	private static int NUM_PAGES = 3;
+	private static int NUM_PAGES = 4;
 
 	private FragmentManager fragmentManager;
 	private Fragment homeFragment;
@@ -78,6 +79,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 				return takePictureFragment;
 			case 2:
 				return new CreatePictureFragment();
+			case 3:
+				return new OnlineGalleryFragment();
 			default:
 				return homeFragment;
 		}

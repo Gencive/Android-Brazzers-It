@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/primary_light">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+         />
+
+        <com.parse.ParseImageView
+            android:id="@+id/picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            />
+
+        <TextView
+            android:id="@+id/btn_up"
+            android:layout_alignEnd="@id/picture"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/picture"
+            android:background="@drawable/thumb_up"/>
+
+        <TextView
+            android:id="@+id/point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/picture"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/btn_down"
+            android:layout_alignStart="@id/picture"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/picture"
+            android:background="@drawable/thumb_down"
+            />
+
+        <ListView
+            android:id="@+id/comment"
+            android:layout_below="@+id/btn_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:dividerHeight="2dp"
+            android:divider="#000000"
+            >
+
+        </ListView>
+
+        <EditText
+            android:id="@+id/post_comment"
+            android:layout_below="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/send_comment"
+            android:layout_margin="10dp"
+            android:inputType="text"
+        />
+        <TextView
+            android:id="@+id/send_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/comment"
+            android:background="@drawable/send"/>
+    </RelativeLayout>
+</ScrollView>

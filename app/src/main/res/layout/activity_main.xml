@@ -39,14 +39,14 @@
             android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:background="@drawable/button_create"/>
-<!--
+
 		<TextView
 			android:id="@+id/btn_gallery"
             android:layout_weight="1"
             android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:background="@drawable/button_online_gallery"/>
--->
+
 	</LinearLayout>
 
     <android.support.v4.view.ViewPager
@@ -56,9 +56,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				 android:id="@+id/fragment_container"
-				 android:layout_below="@+id/camera_menu"
-				 android:layout_width="match_parent"
-				 android:layout_height="wrap_content" />
 </RelativeLayout>

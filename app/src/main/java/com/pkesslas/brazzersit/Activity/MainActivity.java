@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 	public final static int HOME_POSITION = 0;
 	public final static int CAMERA_POSITION = 1;
 	public final static int CREATE_POSITION = 2;
+	public final static int GALLERY_POSTION = 3;
 
 	private TextView cameraButton, createButton, galleryButton, homeButton;
 	private ListView photoList;
@@ -57,12 +58,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		homeButton = (TextView) findViewById(R.id.btn_home);
 		cameraButton = (TextView) findViewById(R.id.btn_camera);
 		createButton = (TextView) findViewById(R.id.btn_create);
-//		galleryButton = (TextView) findViewById(R.id.btn_gallery);
+		galleryButton = (TextView) findViewById(R.id.btn_gallery);
 
 		cameraButton.setOnClickListener(this);
 		createButton.setOnClickListener(this);
 		homeButton.setOnClickListener(this);
-//		galleryButton.setOnClickListener(this);
+		galleryButton.setOnClickListener(this);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -95,6 +96,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 			mPager.setCurrentItem(CAMERA_POSITION);
 		} else if (v.getId() == R.id.btn_create) {
 			mPager.setCurrentItem(CREATE_POSITION);
+		} else if (v.getId() == R.id.btn_gallery) {
+			mPager.setCurrentItem(GALLERY_POSTION);
 		}
 	}
 
@@ -132,14 +135,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home_activate));
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
 			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
+			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
 		} else if (pos == 1) {
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera_activate));
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
 			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
+			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
 		} else if (pos == 2) {
 			createButton.setBackground(getResources().getDrawable(R.drawable.button_create_activate));
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
+			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
+		} else if (pos == 3) {
+			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
+			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
+			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
+			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_gallery_activate));
 		}
 	}
 
