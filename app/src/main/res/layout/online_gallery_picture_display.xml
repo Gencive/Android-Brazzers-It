@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/primary_light">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_light">
 
         <TextView
             android:id="@+id/title"
@@ -53,33 +49,32 @@
             android:background="@drawable/thumb_down"
             />
 
-        <ListView
+    <EditText
+        android:id="@+id/post_comment"
+        android:layout_below="@+id/btn_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/send_comment"
+        android:hint="@string/comment_post_hint"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        />
+    <TextView
+        android:id="@+id/send_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/btn_up"
+        android:background="@drawable/send"/>
+
+    <ListView
             android:id="@+id/comment"
-            android:layout_below="@+id/btn_up"
+            android:layout_below="@+id/send_comment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="match_parent"
             android:dividerHeight="2dp"
             android:divider="#000000"
             >
 
-        </ListView>
-
-        <EditText
-            android:id="@+id/post_comment"
-            android:layout_below="@+id/comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/send_comment"
-            android:layout_margin="10dp"
-            android:inputType="text"
-        />
-        <TextView
-            android:id="@+id/send_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/comment"
-            android:background="@drawable/send"/>
-    </RelativeLayout>
-</ScrollView>
+    </ListView>
+</RelativeLayout>

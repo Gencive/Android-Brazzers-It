@@ -25,5 +25,6 @@
     <string name="account_creation_error">Error</string>
     <string name="menu_logout">Logout</string>
     <string name="title_activity_online_gallery">OnlineGalleryActivity</string>
+    <string name="comment_post_hint">Submit a comment</string>
 
 </resources>

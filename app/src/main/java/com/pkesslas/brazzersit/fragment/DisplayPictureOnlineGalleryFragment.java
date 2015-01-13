@@ -24,20 +24,22 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pkesslas.brazzersit.Activity.OnlineGalleryActivity;
 import com.pkesslas.brazzersit.R;
+import com.pkesslas.brazzersit.adapter.CommentGalleryAdapter;
 import com.pkesslas.brazzersit.adapter.MainGalleryAdapter;
 import com.pkesslas.brazzersit.helper.FileHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class DisplayPictureOnlineGalleryFragment extends Fragment implements View.OnClickListener {
 	private TextView title, thumbUp, thumbDown, postComment, point;
 	private ListView commentList;
-	private Context context;
-	private ScrollView rootView;
+	private RelativeLayout rootView;
 	private ParseObject pictureObject;
 	private ParseImageView imageView;
 	private EditText comment;
@@ -48,9 +50,7 @@ public class DisplayPictureOnlineGalleryFragment extends Fragment implements Vie
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = (ScrollView) inflater.inflate(R.layout.online_gallery_picture_display, container, false);
-
-		Log.i("Displayblabla", "CONSTRUCT");
+		rootView = (RelativeLayout) inflater.inflate(R.layout.online_gallery_picture_display, container, false);
 
 		TextView title = (TextView) rootView.findViewById(R.id.title);
 		imageView = (ParseImageView) rootView.findViewById(R.id.picture);
@@ -72,29 +72,22 @@ public class DisplayPictureOnlineGalleryFragment extends Fragment implements Vie
 		thumbDown.setOnClickListener(this);
 		thumbUp.setOnClickListener(this);
 
-
+		buildListView();
 		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		return rootView;
 	}
 
 	private void buildListView() {
-		ArrayList<String> objects = FileHelper.getAllFinalPicturePath();
-		for (String path : objects) {
-			Log.i("Selected path", path);
+		ParseQuery<ParseObject> commentQuery = ParseQuery.getQuery("Comment");
+		commentQuery.whereEqualTo("image", pictureObject);
+		commentQuery.orderByDescending("point");
+
+		commentList = (ListView) rootView.findViewById(R.id.comment);
+		try {
+			final CommentGalleryAdapter adapter = new CommentGalleryAdapter(getActivity(), commentQuery.find());
+			commentList.setAdapter(adapter);
+		} catch (ParseException ignored) {
 		}
-
-		commentList = (ListView) rootView.findViewById(R.id.photo_list);
-		final MainGalleryAdapter adapter = new MainGalleryAdapter(context, objects);
-		commentList.setAdapter(adapter);
-
-		commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Bundle args = new Bundle();
-				args.putInt("position", position);
-				//listener.onSwitchToNextHomeFragment(args);
-			}
-		});
 	}
 
 	@Override

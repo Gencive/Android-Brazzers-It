@@ -30,7 +30,7 @@ public class OnlineGalleryActivity extends ActionBarActivity implements View.OnC
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new OnlineGalleryAdapter(this, getSupportFragmentManager(), query);
-		mPager.setOffscreenPageLimit(5);
+		mPager.setOffscreenPageLimit(1);
 		mPager.setAdapter(mPagerAdapter);
 	}
 
