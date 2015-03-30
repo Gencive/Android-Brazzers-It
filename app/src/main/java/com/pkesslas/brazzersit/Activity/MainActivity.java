@@ -44,11 +44,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		currentUser = ParseUser.getCurrentUser();
-		if (currentUser == null && NetworkHelper.isInternetAvailable(this)) {
-			startActivity(new Intent(this, LoginActivity.class));
-			finish();
-		}
+//		currentUser = ParseUser.getCurrentUser();
+//		if (currentUser == null && NetworkHelper.isInternetAvailable(this)) {
+//			startActivity(new Intent(this, LoginActivity.class));
+//			finish();
+//		}
 
 		//currentUser.logOut();
 		android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
@@ -58,19 +58,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		homeButton = (TextView) findViewById(R.id.btn_home);
 		cameraButton = (TextView) findViewById(R.id.btn_camera);
 		createButton = (TextView) findViewById(R.id.btn_create);
-		galleryButton = (TextView) findViewById(R.id.btn_gallery);
+//		galleryButton = (TextView) findViewById(R.id.btn_gallery);
 
 		cameraButton.setOnClickListener(this);
 		createButton.setOnClickListener(this);
 		homeButton.setOnClickListener(this);
-		galleryButton.setOnClickListener(this);
+//		galleryButton.setOnClickListener(this);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(mPagerAdapter);
 		mPager.setOnPageChangeListener(this);
 	}
-
+/*
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 		return super.onOptionsItemSelected(item);
 	}
-
+*/
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btn_home) {
@@ -96,8 +96,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 			mPager.setCurrentItem(CAMERA_POSITION);
 		} else if (v.getId() == R.id.btn_create) {
 			mPager.setCurrentItem(CREATE_POSITION);
-		} else if (v.getId() == R.id.btn_gallery) {
-			mPager.setCurrentItem(GALLERY_POSTION);
+//		} else if (v.getId() == R.id.btn_gallery) {
+//			mPager.setCurrentItem(GALLERY_POSTION);
 		}
 	}
 
@@ -135,25 +135,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home_activate));
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
 			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
-			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
+//			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
 		} else if (pos == 1) {
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera_activate));
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
 			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
-			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
+//			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
 		} else if (pos == 2) {
 			createButton.setBackground(getResources().getDrawable(R.drawable.button_create_activate));
 			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
 			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
-			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
-		} else if (pos == 3) {
-			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
-			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
-			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
-			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_gallery_activate));
+//			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_online_gallery));
+//		} else if (pos == 3) {
+//			createButton.setBackground(getResources().getDrawable(R.drawable.button_create));
+//			cameraButton.setBackground(getResources().getDrawable(R.drawable.button_camera));
+//			homeButton.setBackground(getResources().getDrawable(R.drawable.button_home));
+//			galleryButton.setBackground(getResources().getDrawable(R.drawable.button_gallery_activate));
 		}
 	}
-
+/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -164,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 		}
 		return true;
 	}
-
+*/
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
 		// TODO Auto-generated method stub
 	}

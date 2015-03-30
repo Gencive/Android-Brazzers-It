@@ -17,7 +17,7 @@ import com.pkesslas.brazzersit.interfaces.FirstPageFragmentListener;
  * Created by Pierre-Elie on 30/12/14.
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
-	private static int NUM_PAGES = 4;
+	private static int NUM_PAGES = 3;
 
 	private FragmentManager fragmentManager;
 	private Fragment homeFragment;
@@ -79,8 +79,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 				return takePictureFragment;
 			case 2:
 				return new CreatePictureFragment();
-			case 3:
-				return new OnlineGalleryFragment();
+//			case 3:
+				//return new OnlineGalleryFragment();
 			default:
 				return homeFragment;
 		}
@@ -98,7 +98,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 		} else if (object instanceof LocalGalleryFragment && homeFragment instanceof HomeFragment) {
 			return POSITION_NONE;
 		} else if (object instanceof TakePictureFragment && takePictureFragment instanceof DisplayTakenPhotoFragment) {
-				return POSITION_NONE;
+			return POSITION_NONE;
 		} else if (object instanceof DisplayTakenPhotoFragment && takePictureFragment instanceof TakePictureFragment) {
 			return POSITION_NONE;
 		}

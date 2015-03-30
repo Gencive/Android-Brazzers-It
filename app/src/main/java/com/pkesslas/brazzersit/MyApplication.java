@@ -18,7 +18,7 @@ public class MyApplication extends Application {
 	}
 
 	private void initParse() {
-		Parse.enableLocalDatastore(this);
-		Parse.initialize(this, "TJOWTuFpoQToMQ6EyPXhYEA7GP0ctSIL8yBZVp1u", "IXjIMuOE8qCpaxmgs0CnLyrjks57JT3zictcfS3S");
+		//Parse.enableLocalDatastore(this);
+		//Parse.initialize(this, "TJOWTuFpoQToMQ6EyPXhYEA7GP0ctSIL8yBZVp1u", "IXjIMuOE8qCpaxmgs0CnLyrjks57JT3zictcfS3S");
 	}
 }

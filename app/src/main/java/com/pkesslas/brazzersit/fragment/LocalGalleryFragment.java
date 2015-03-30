@@ -101,9 +101,9 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 		}
 
 
-		if (ParseUser.getCurrentUser() != null && NetworkHelper.isInternetAvailable(getActivity()) && !ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
-			uploadButton.setVisibility(View.VISIBLE);
-		}
+//		if (ParseUser.getCurrentUser() != null && NetworkHelper.isInternetAvailable(getActivity()) && !ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+//			uploadButton.setVisibility(View.VISIBLE);
+//		}
 
 		selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 		selectedImage.setImageBitmap(selectedBitmap);
@@ -170,15 +170,15 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 			buildGallery();
 			selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 			selectedImage.setImageBitmap(selectedBitmap);
-		} else if (v.getId() == R.id.btn_upload) {
-			if (NetworkHelper.isInternetAvailable(getActivity())) {
-				getTitle(null);
-			} else {
-				Toast.makeText(getActivity(), "An internet connection is required.", Toast.LENGTH_LONG).show();
-			}
+//		} else if (v.getId() == R.id.btn_upload) {
+//			if (NetworkHelper.isInternetAvailable(getActivity())) {
+//				getTitle(null);
+//			} else {
+//				Toast.makeText(getActivity(), "An internet connection is required.", Toast.LENGTH_LONG).show();
+//			}
 		}
 	}
-
+/*
 	private void getTitle(String error) {
 		final EditText title = new EditText(getActivity());
 		if (error != null) {
@@ -229,7 +229,7 @@ public class LocalGalleryFragment extends Fragment implements View.OnClickListen
 			}
 		});
 	}
-
+*/
 	private void reloadImageView() {
 		selectedBitmap = BitmapFactory.decodeFile(picturePath.get(picturePosition));
 		selectedImage.setImageBitmap(selectedBitmap);
